@@ -4,8 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcomEdge</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <header class="site-header">
+        <h1>EcomEdge</h1>
+        <p>Simple eCommerce platform prototype (add to cart + checkout)</p>
+    </header>
+
+    <main class="container">
+        <section id="products" class="products-grid" aria-label="Product catalog">
+            <!-- Products inserted by JavaScript -->
+        </section>
+
+        <aside class="cart-panel">
+            <h2>Your Cart</h2>
+            <div id="cart-items" class="cart-items">Cart is empty</div>
+            <div class="cart-summary">
+                <div>Total: $<span id="cart-total">0.00</span></div>
+                <button id="checkout-btn" class="primary-btn" disabled>Proceed to Checkout</button>
+                <button id="clear-cart-btn" class="ghost-btn" disabled>Clear Cart</button>
+            </div>
+        </aside>
+
+        <section id="checkout" class="checkout-section hidden" aria-label="Checkout form">
+            <h2>Checkout</h2>
+            <form id="checkout-form">
+                <label>Name<input type="text" id="customer-name" required></label>
+                <label>Email<input type="email" id="customer-email" required></label>
+                <label>Address<textarea id="customer-address" required></textarea></label>
+                <button type="submit" class="primary-btn">Place Order</button>
+                <button type="button" id="cancel-checkout" class="ghost-btn">Cancel</button>
+            </form>
+            <div id="checkout-message" class="message"></div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; <span id="current-year"></span> EcomEdge. Demo only.</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
