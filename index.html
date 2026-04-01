@@ -1,49 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcomEdge</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShopNest — Premium eCommerce</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+        <link rel="stylesheet" href="./style.css">
+ 
 </head>
+
 <body>
-    <header class="site-header">
-        <h1>EcomEdge</h1>
-        <p>Simple eCommerce platform prototype (add to cart + checkout)</p>
-    </header>
 
-    <main class="container">
-        <section id="products" class="products-grid" aria-label="Product catalog">
-            <!-- Products inserted by JavaScript -->
-        </section>
+    <!-- NAV -->
+    <nav>
+        <div class="logo" onclick="goPage('home')">Shop<span>Nest</span></div>
+        <div class="search-wrap">
+            <input type="text" id="searchInput" placeholder="Search products, categories..."
+                oninput="handleSearch(this.value)" />
+            <span class="search-icon">🔍</span>
+        </div>
+        <div class="nav-actions">
+            <button class="nav-btn" onclick="goPage('wishlist')" title="Wishlist">♡<span class="badge" id="wishBadge"
+                    style="display:none">0</span></button>
+            <button class="nav-btn" onclick="openCart()" title="Cart">🛒<span class="badge"
+                    id="cartBadge">0</span></button>
+            <button class="btn-primary" onclick="goPage('home')">🏠 Home</button>
+        </div>
+    </nav>
 
-        <aside class="cart-panel">
-            <h2>Your Cart</h2>
-            <div id="cart-items" class="cart-items">Cart is empty</div>
-            <div class="cart-summary">
-                <div>Total: $<span id="cart-total">0.00</span></div>
-                <button id="checkout-btn" class="primary-btn" disabled>Proceed to Checkout</button>
-                <button id="clear-cart-btn" class="ghost-btn" disabled>Clear Cart</button>
+    <!-- PAGES -->
+
+    <!-- HOME PAGE -->
+    <div id="homePage" class="page active">
+
+        <!-- HERO -->
+        <div class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-grid"></div>
+            <div class="hero-content">
+                <div class="hero-tag">🚀 New Arrivals 2025</div>
+                <h1>Discover <em>Premium</em> Products For Every Need</h1>
+                <p>From electronics to fashion, home decor to sports — shop everything in one place with the best deals.
+                </p>
+                <div class="hero-btns">
+                    <button class="btn-primary"
+                        onclick="document.getElementById('allProductsSection').scrollIntoView({behavior:'smooth'})">Shop
+                        Now →</button>
+                    <button class="btn-outline" onclick="goPage('wishlist')">♡ Wishlist</button>
+                </div>
             </div>
-        </aside>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="num">500+</div>
+                    <div class="lbl">Products</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="num">50K+</div>
+                    <div class="lbl">Customers</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="num">4.9★</div>
+                    <div class="lbl">Rating</div>
+                </div>
+            </div>
+        </div>
 
-        <section id="checkout" class="checkout-section hidden" aria-label="Checkout form">
-            <h2>Checkout</h2>
-            <form id="checkout-form">
-                <label>Name<input type="text" id="customer-name" required></label>
-                <label>Email<input type="email" id="customer-email" required></label>
-                <label>Address<textarea id="customer-address" required></textarea></label>
-                <button type="submit" class="primary-btn">Place Order</button>
-                <button type="button" id="cancel-checkout" class="ghost-btn">Cancel</button>
-            </form>
-            <div id="checkout-message" class="message"></div>
-        </section>
-    </main>
+        <!-- CATEGORIES -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Shop by Category</h2>
+                <a onclick="clearCatFilter()">View All</a>
+            </div>
+            <div class="cats-grid" id="catsGrid"></div>
+        </div>
 
-    <footer class="site-footer">
-        <p>&copy; <span id="current-year"></span> EcomEdge. Demo only.</p>
+        <!-- PROMO -->
+        <div class="promo-banner">
+            <div class="promo-text">
+                <div class="tag">⚡ Limited Time Offer</div>
+                <h2>Get 20% Off Your First Order</h2>
+                <p>Use code below at checkout. Valid on all categories!</p>
+            </div>
+            <div class="promo-code" onclick="copyCode(this)">SHOP20</div>
+        </div>
+
+        <!-- PRODUCTS -->
+        <div class="section" id="allProductsSection">
+            <div class="section-header">
+                <h2 id="productsTitle">All Products</h2>
+            </div>
+            <div class="filters">
+                <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+                <button class="filter-btn" onclick="setFilter('new', this)">🆕 New</button>
+                <button class="filter-btn" onclick="setFilter('sale', this)">🏷️ On Sale</button>
+                <button class="filter-btn" onclick="setFilter('top', this)">⭐ Top Rated</button>
+                <select class="sort-select" onchange="setSort(this.value)">
+                    <option value="default">Sort: Default</option>
+                    <option value="low">Price: Low to High</option>
+                    <option value="high">Price: High to Low</option>
+                    <option value="rating">Best Rating</option>
+                </select>
+            </div>
+            <div class="products-grid" id="productsGrid"></div>
+            <div class="pagination" id="pagination"></div>
+        </div>
+
+    </div>
+
+    <!-- WISHLIST PAGE -->
+    <div id="wishlistPage" class="page">
+        <div class="section">
+            <div class="section-header">
+                <h2>♡ My Wishlist</h2>
+            </div>
+            <div class="products-grid" id="wishlistGrid"></div>
+            <div id="wishlistEmpty" class="empty-state" style="display:none">
+                <div class="big">🤍</div>
+                <p>No items in wishlist yet.<br>Click ♡ on products to save them!</p>
+                <br><button class="btn-primary" onclick="goPage('home')">Browse Products</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CART SIDEBAR -->
+    <div class="overlay" id="overlay" onclick="closeCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>🛒 Your Cart</h3>
+            <button class="close-btn" onclick="closeCart()">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer" id="cartFooter"></div>
+    </div>
+
+    <!-- PRODUCT MODAL -->
+    <div class="modal-overlay" id="modalOverlay" onclick="handleModalClick(event)">
+        <div class="modal-wrap">
+            <div class="modal" id="productModal">
+                <button class="modal-close" onclick="closeModal()">✕</button>
+                <div id="modalContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div>
+            <div class="footer-logo">ShopNest</div>
+            <p>Premium products, unbeatable prices. Your one-stop shop for everything.</p>
+        </div>
+        <div>
+            <h4>Shop</h4>
+            <ul>
+                <li>Electronics</li>
+                <li>Fashion</li>
+                <li>Home & Living</li>
+                <li>Sports</li>
+                <li>Books</li>
+            </ul>
+        </div>
+        <div>
+            <h4>Support</h4>
+            <ul>
+                <li>Help Center</li>
+                <li>Track Order</li>
+                <li>Returns</li>
+                <li>Contact Us</li>
+            </ul>
+        </div>
+        <div>
+            <h4>Company</h4>
+            <ul>
+                <li>About Us</li>
+                <li>Careers</li>
+                <li>Blog</li>
+                <li>Privacy Policy</li>
+            </ul>
+        </div>
     </footer>
-
-    <script src="script.js"></script>
+<script src="./script.js"></script>
 </body>
+
 </html>
